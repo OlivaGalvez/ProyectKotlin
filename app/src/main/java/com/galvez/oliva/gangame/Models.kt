@@ -29,7 +29,7 @@ data class Deal (var title:String,
 }
 
 data class TopGame (var title: String,
-                    var owners:String,
+                    var owners:Int,
                     var steamRating: Int,
                     var publisher: String,
                     var price: Float,
