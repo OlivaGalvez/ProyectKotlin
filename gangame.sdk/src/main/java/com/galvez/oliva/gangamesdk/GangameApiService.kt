@@ -1,5 +1,7 @@
 package com.galvez.oliva.gangamesdk
 
+import com.galvez.oliva.gangamesdk.serializer.TopGameDeserializer
+import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -12,6 +14,10 @@ class GangameApiService {
 
     //Configuración del cliente
     init {
+        val gson = GsonBuilder()
+                .registerTypeAdapter(TopGame::class.java, TopGameDeserializer())
+                .create()
+
         val apiClientConfig =
                 Retrofit.Builder()
                         .baseUrl(Routes.BASE_URL)
