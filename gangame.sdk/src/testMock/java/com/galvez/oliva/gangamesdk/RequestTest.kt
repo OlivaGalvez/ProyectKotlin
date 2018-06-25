@@ -1,6 +1,7 @@
 package com.galvez.oliva.gangamesdk
 
 import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import org.junit.Assert
 import org.junit.Test
@@ -41,19 +42,24 @@ class RequestTest {
         val games = response.body()
 
         val parser = JsonParser()
-        val jsonResponse: JsonArray = parser.parse(MockResponses.TOP_100_GAMES).asJsonArray
+        val jsonResponse: List<JsonObject> = parser.parse(MockResponses.TOP_100_GAMES)
+                .asJsonObject
+                .entrySet()
+                .map { (_, json) ->
+                    json.asJsonObject
+                }
 
         Assert.assertTrue(response.isSuccessful)
 
         games?.let{
-            Assert.assertEquals(games?.size, jsonResponse.size())
+            Assert.assertEquals(games?.size, jsonResponse.size)
 
-            games.zip(jsonResponse).forEach{ (deal, jsonDeal) ->
-                with(jsonDeal.asJsonObject) {
-                    Assert.assertEquals(deal.title, this["title"].asString)
-                    Assert.assertEquals(deal.steamRating, this["score_rank"].asInt)
-                    Assert.assertEquals(deal.owners, this["owners"].asString)
-                    Assert.assertEquals(deal.publisher, this["publisher"].asInt)
+            games.zip(jsonResponse).forEach{ (topGame, jsonTopGame) ->
+                with(jsonTopGame.asJsonObject) {
+                    Assert.assertEquals(topGame.title, this["name"].asString)
+                    Assert.assertEquals(topGame.steamRating, this["score_rank"].asInt)
+                    Assert.assertEquals(topGame.owners, this["owners"].asString)
+                    Assert.assertEquals(topGame.publisher, this["publisher"].asInt)
                 }
             }
         }

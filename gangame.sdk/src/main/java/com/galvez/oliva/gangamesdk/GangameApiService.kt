@@ -18,7 +18,7 @@ class GangameApiService(val apiConfig: GangameApiConfig = GangameClientConfig())
     //Configuración del cliente
     init {
 
-        val tokenType = object: TypeToken<ArrayList<TopGame>>(){}.type
+        val tokenType = object : TypeToken<ArrayList<TopGame>>(){}.type
 
         val gson = GsonBuilder()
                 .registerTypeAdapter(TopGame::class.java, TopGameDeserializer())

@@ -22,9 +22,9 @@ class ListTopGameDeserializer: JsonDeserializer<ArrayList<TopGame>>{
         val listTopGames: List<TopGame> = jsonTopGames.map { json ->
             gson.fromJson(json, TopGame::class.java)
         }
-        val arrayListTopGame: ArrayList<TopGame> = arrayListOf()
-        arrayListTopGame.addAll(listTopGames)
+        val arrayListTopGames: ArrayList<TopGame> = arrayListOf()
+        arrayListTopGames.addAll(listTopGames)
 
-        return arrayListTopGame
+        return arrayListTopGames
     }
 }
