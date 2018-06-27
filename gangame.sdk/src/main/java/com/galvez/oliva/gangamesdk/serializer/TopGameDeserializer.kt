@@ -1,5 +1,6 @@
 package com.galvez.oliva.gangamesdk.serializer
 
+import android.support.annotation.IntegerRes
 import com.galvez.oliva.gangamesdk.TopGame
 import com.google.gson.Gson
 import com.google.gson.JsonDeserializationContext
@@ -22,10 +23,16 @@ class TopGameDeserializer: JsonDeserializer<TopGame> {
         val gson = Gson()
 
         val topGame = gson.fromJson(json, TopGame::class.java)
-        val appId = json.asJsonObject["appid"].asInt.toString()
-        val thumb = String.format(BASE_IMG_URL, appId)
 
+        val jsonGame = json.asJsonObject
+        val appId = jsonGame["appid"].asInt.toString()
+
+        val rawRating = jsonGame["score_rank"].asString
+        val steamRating = if (rawRating.isEmpty()) 0 else Integer.parseInt(rawRating.trim())
+
+        val thumb = String.format(BASE_IMG_URL, appId)
         topGame.thumb = thumb
+        topGame.steamRating = steamRating
         return topGame
     }
 }
