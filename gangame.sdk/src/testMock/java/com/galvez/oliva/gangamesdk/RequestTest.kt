@@ -58,8 +58,9 @@ class RequestTest {
                 with(jsonTopGame.asJsonObject) {
                     Assert.assertEquals(topGame.title, this["name"].asString)
                     Assert.assertEquals(topGame.steamRating, this["score_rank"].asInt)
-                    Assert.assertEquals(topGame.owners, this["owners"].asString)
-                    Assert.assertEquals(topGame.publisher, this["publisher"].asInt)
+                    Assert.assertEquals(topGame.owners, this["owners"].asInt)
+                    Assert.assertEquals(topGame.publisher, this["publisher"].asString)
+                    Assert.assertEquals(topGame.thumb, "http://cdn.akamai.steamstatic.com/steam/apps/${this["appid"].asInt}/capsule_sm_120.jpg?t=1488471030")
                 }
             }
         }
