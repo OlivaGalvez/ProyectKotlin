@@ -11,6 +11,7 @@ import com.galvez.oliva.commons.BaseListFragment
 import com.galvez.oliva.commons.DataBindingRecyclerAdapter
 import com.galvez.oliva.gangame.R
 import com.galvez.oliva.gangame.TopGame
+import com.galvez.oliva.gangame.data.GangameDataSource
 
 
 /**
@@ -23,23 +24,29 @@ class TopOwnedFragment : BaseListFragment () {
                 R.layout.item_top_game)
     }
 
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        (listAdapter as DataBindingRecyclerAdapter<TopGame>)
-                .items.addAll(getDummyTopGames())
-        listAdapter.notifyDataSetChanged()
+    override fun onResume() {
+        super.onResume()
+        showTopRated()
     }
 
-    fun getDummyTopGames(): ArrayList<TopGame>{
-        return arrayListOf(TopGame(title="Counter Strike",
-                owners = 123456789,
-                publisher = "Valve",
-                steamRating = 80,
-                price = 9.99F,
-                position = 1,
-                thumb = "https://images.g2a.com/newlayout/600x351/1x1x0/099f8c52f6de/59e5b37fae653a795a1fbdb2"
-        ))
+    private fun showTopRated() {
+        GangameDataSource.getTopRated()
+                .subscribe({list ->
+                    replaceItems(list)
+                }, {error ->
+                    showError(error)
+                })
+    }
+
+    private fun showError(error: Throwable) {
+        error.printStackTrace()
+    }
+
+    private fun replaceItems (list: List<TopGame>) {
+        with(listAdapter as DataBindingRecyclerAdapter<TopGame>) {
+            items.clear()
+            items.addAll(list)
+            notifyDataSetChanged()
+        }
     }
 }
